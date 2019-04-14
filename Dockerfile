@@ -1,11 +1,11 @@
-FROM ubuntu:latest
+FROM ubuntu:16.04
 MAINTAINER Dhanu Gupta <dhanu.gupta@gmail.com>
 
 RUN apt-get update
 RUN apt-get -y upgrade
 
 # Install apache, PHP, and supplimentary programs. curl and lynx-cur are for debugging the container.
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 && apt-get clean
 
 # Enable apache mods.
 #RUN php5enmod openssl
@@ -25,17 +25,15 @@ ENV APACHE_PID_FILE /var/run/apache2.pid
 
 EXPOSE 80
 
-# Copy site into place.
-ADD app /var/www/site/app
-ADD http://www.proredetelecom.com.br/docker/logo.jpg /var/www/site/app
-ADD http://www.proredetelecom.com.br/docker/index.html /var/www/site/app
-ADD http://www.proredetelecom.com.br/docker/styles.css /var/www/site/app
+WORKDR /var/www/html
 
 # Copy site into place.
-ADD app /var/www/site/app
+ADD http://www.proredetelecom.com.br/docker/logo.jpg /var/www/html
+ADD http://www.proredetelecom.com.br/docker/index.html /var/www/html
+ADD http://www.proredetelecom.com.br/docker/styles.css /var/www/html
 
 # Update the default apache site with the config we created.
 ADD apache-config.conf /etc/apache2/sites-enabled/000-default.conf
 
 # By default, simply start apache.
-CMD /usr/sbin/apache2ctl -D FOREGROUND
+CMD ["apache2ctl", "-D",  "FOREGROUND"]
