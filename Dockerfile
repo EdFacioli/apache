@@ -30,4 +30,12 @@ ADD app /var/www/site/app
 ADD http://www.proredetelecom.com.br/docker/logo.jpg /var/www/site/app
 ADD http://www.proredetelecom.com.br/docker/index.html /var/www/site/app
 ADD http://www.proredetelecom.com.br/docker/styles.css /var/www/site/app
-RUN chown -R www-data: /var/www/html/.
+
+# Copy site into place.
+ADD app /var/www/site/app
+
+# Update the default apache site with the config we created.
+ADD apache-config.conf /etc/apache2/sites-enabled/000-default.conf
+
+# By default, simply start apache.
+CMD /usr/sbin/apache2ctl -D FOREGROUND
