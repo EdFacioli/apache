@@ -25,7 +25,7 @@ ENV APACHE_PID_FILE /var/run/apache2.pid
 
 EXPOSE 80
 
-WORKDR /var/www/html
+WORKDIR /var/www/html
 
 # Copy site into place.
 ADD http://www.proredetelecom.com.br/docker/logo.jpg /var/www/html
